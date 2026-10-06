@@ -9,7 +9,7 @@ h = float (input("Enter h: "))
 x = a
 
 sum_negative = 0
-mult_negative = 0
+mult_negative = 1
 
 while x <= b:
     y = math.sin(x) + 0.5*math.cos(x)
