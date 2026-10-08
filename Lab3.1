@@ -1,0 +1,18 @@
+#Task1
+
+a = list(map(int, input( "Enter numbers separated by spaces: ").split()))
+
+min_index = 0
+
+for i in range(len(a)):
+    
+    if a[i] <= a[min_index]:
+        min_index = i
+    
+average = sum(a) / len(a)
+average_int = int(average) 
+print("Average is: ", average_int)
+
+a[min_index] = average_int
+
+print(" Result: " , a)
