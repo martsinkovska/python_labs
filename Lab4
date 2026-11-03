@@ -1,0 +1,17 @@
+m = int(input("Number of rows: "))
+n = int(input("Number of columns: "))
+
+matrix = []
+for i in range(m):
+    row = list(map(int, input("Enter a row separated by spaces: ").split()))
+    matrix.append(row)
+
+print("Columns in increasing order:")
+for j in range(n):
+    increasing = True
+    for i in range(1, m):
+        if matrix[i][j] <= matrix[i - 1][j]:
+            increasing = False
+            break
+    if increasing:
+        print(j + 1)
