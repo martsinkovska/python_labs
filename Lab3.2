@@ -61,11 +61,14 @@ students = [
     }
 ]
 
-
 the_highest_age = 0
 
 for student in students:
     if student["age"] > the_highest_age:
+        the_highest_age = student["age"]
+        the_oldest_student = student["name"]
+
+print("The oldest student is:", the_oldest_student)
         the_oldest_student = student["name"]
         
 print("The oldest student is: ", the_oldest_student)
