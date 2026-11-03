@@ -1,0 +1,20 @@
+n = int(input("Matrix size: "))
+
+matrix = []
+for i in range(n):
+    row = list(map(int, input("Enter a row: ").split()))
+    matrix.append(row)
+
+result = 0
+for i in range(n):
+    row_max = max(matrix[i])
+    col_min = matrix[0][i]
+
+    for j in range(1, n):
+        if matrix[j][i] < col_min:
+            col_min = matrix[j][i]
+
+    result += row_max * col_min
+
+print("Result:", result)
+
