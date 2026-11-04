@@ -1,0 +1,174 @@
+import csv  # Підключаємо модуль для роботи з CSV-файлами
+import re  # Підключаємо модуль для пошуку слів за шаблоном
+
+# Завдання 1.1–1.3. Запис, читання та порівняння тексту
+
+test1 = "Test variable to write to file"  # Зберігаємо текст у змінну test1
+
+with open("tests.txt", "w", encoding="utf-8") as file:  # Відкриваємо файл для запису, попередній вміст стирається
+    file.write(test1)  # Записуємо текст у файл; після завершення блоку with файл закриється
+
+with open("tests.txt", "r", encoding="utf-8") as file:  # Відкриваємо файл для читання
+    test2 = file.read()  # Зчитуємо весь вміст файла у змінну test2
+
+print("Texts are equal:", test1 == test2)  # Виводимо True, якщо тексти однакові, і False, якщо різні
+
+
+# Завдання 1.4–1.5. Створення та читання CSV-файла художників
+
+with open("painters.csv", "w", encoding="utf-8", newline="") as file:  # Відкриваємо CSV для запису без додаткового перетворення переносів рядків
+    file.write("author,canvas\n")  # Записуємо назви стовпців; \n означає новий рядок
+    file.write('Vincent Willem van Gogh,"Vase with sunflowers"\n')  # Записуємо першого художника та картину
+    file.write('Rembrandt Harmenszoon van Rijn,"Aristotle"\n')  # Записуємо другого художника та картину
+    file.write('Leonardo da Vinci,"Selfportrait"\n')  # Записуємо третього художника та картину
+
+with open("painters.csv", "r", encoding="utf-8", newline="") as file:  # Відкриваємо CSV для читання
+    painters = list(csv.DictReader(file))  # Перетворюємо рядки CSV на список словників із ключами author і canvas
+
+print("Painters:", painters)  # Виводимо список словників із даними художників
+
+
+# Завдання 1.6. Запис списку фільмів у CSV
+
+imdb = [  # Починаємо список словників із даними фільмів
+    {"title": "Lord of the Rings: Two towers", "year": 2002, "rating": 8.7},  # Назва, рік і рейтинг першого фільму
+    {"title": "Matrix", "year": 1999, "rating": 8.7},  # Дані другого фільму
+    {"title": "Interstellar", "year": 2014, "rating": 8.5},  # Дані третього фільму
+    {"title": "Back to the Future", "year": 1985, "rating": 8.5},  # Дані четвертого фільму
+    {"title": "Logan: Wolverine", "year": 2017, "rating": 8.1}  # Дані п’ятого фільму
+]  # Завершуємо список фільмів
+
+with open("imdb.csv", "w", encoding="utf-8", newline="") as file:  # Відкриваємо CSV для запису; newline="" запобігає зайвим порожнім рядкам
+    writer = csv.DictWriter(file, fieldnames=["title", "year", "rating"])  # Створюємо об’єкт для запису словників і задаємо порядок стовпців
+    writer.writeheader()  # Записуємо заголовки title, year, rating
+    writer.writerows(imdb)  # Записуємо всі словники зі списку imdb у файл
+
+
+# Завдання 2.1. Обчислення суми чисел із файла
+
+with open("numbers.txt", "w", encoding="utf-8") as file:  # Створюємо файл чисел або перезаписуємо наявний
+    for number in range(1, 11):  # Перебираємо числа від 1 до 10 включно
+        file.write(str(number) + "\n")  # Перетворюємо число на текст і записуємо з нового рядка
+
+total = 0  # Початкова сума дорівнює нулю
+
+with open("numbers.txt", "r", encoding="utf-8") as file:  # Відкриваємо файл із числами
+    for line in file:  # По черзі зчитуємо кожен рядок
+        total += float(line)  # Перетворюємо рядок на число та додаємо його до суми
+
+print("Sum:", total)  # Виводимо обчислену суму на екран
+
+with open("sum_numbers.txt", "w", encoding="utf-8") as file:  # Відкриваємо файл для збереження суми
+    file.write(str(total))  # Перетворюємо суму на текст і записуємо у файл
+
+
+# Завдання 2.2. Визначення парності числа
+
+number = int(input("Enter an integer: "))  # Зчитуємо введення та перетворюємо його на ціле число
+
+with open("parity.txt", "w", encoding="utf-8") as file:  # Відкриваємо файл для запису результату
+    if number % 2 == 0:  # Перевіряємо, чи дорівнює нулю остача від ділення на 2
+        file.write("Even")  # Якщо так, записуємо, що число парне
+    else:  # Виконуємо цей блок, якщо число непарне
+        file.write("Odd")  # Записуємо, що число непарне
+
+
+# Завдання 2.3. Читання тексту двома способами
+
+with open("learning_python.txt", "w", encoding="utf-8") as file:  # Створюємо файл із прикладами можливостей Python
+    file.write("In Python you can work with files.\n")  # Записуємо перше речення
+    file.write("In Python you can create games.\n")  # Записуємо друге речення
+    file.write("In Python you can analyze data.\n")  # Записуємо третє речення
+
+with open("learning_python.txt", "r", encoding="utf-8") as file:  # Відкриваємо файл для першого способу читання
+    for line in file:  # Перебираємо рядки файла
+        print(line.strip())  # Прибираємо пробільні символи по краях рядка та виводимо його
+
+with open("learning_python.txt", "r", encoding="utf-8") as file:  # Повторно відкриваємо файл для другого способу читання
+    lines = file.readlines()  # Зчитуємо всі рядки у список, зберігаючи символи переносу
+
+print(lines)  # Виводимо список поза блоком with, коли файл уже закритий
+
+
+# Завдання 2.4. Заміна слова Python на C
+
+with open("learning_python.txt", "r", encoding="utf-8") as file:  # Відкриваємо файл із реченнями
+    for line in file:  # Перебираємо всі рядки
+        print(line.replace("Python", "C").strip())  # Замінюємо Python на C, прибираємо пробіли по краях і виводимо результат
+
+
+# Завдання 2.5. Книга гостей
+
+with open("guest_book.txt", "a", encoding="utf-8") as file:  # Відкриваємо файл для додавання записів у кінець; за відсутності він створиться
+    while True:  # Повторюємо цикл, поки не виконається break
+        name = input("Enter your name or press Enter to finish: ")  # Запитуємо ім’я користувача
+
+        if name == "":  # Перевіряємо, чи користувач натиснув Enter без введення імені
+            break  # Завершуємо цикл введення імен
+
+        greeting = "Hello, " + name + "!"  # Об’єднуємо текст та ім’я у привітання
+        print(greeting)  # Виводимо привітання на екран
+        file.write(greeting + "\n")  # Записуємо привітання у файл з окремого рядка
+
+
+# Завдання 2.6. Підрахунок слова the у двох книгах
+
+for filename in ["book1.txt", "book2.txt"]:  # По черзі беремо назви двох файлів книг
+    with open(filename, "r", encoding="utf-8-sig") as file:  # Відкриваємо текст книги; utf-8-sig також прибирає початкову позначку BOM, якщо вона є
+        text = file.read().lower()  # Зчитуємо весь текст і переводимо літери в нижній регістр
+
+    words = re.findall(r"\bthe\b", text)  # Знаходимо всі окремі слова the; \b позначає межу слова, а r зберігає зворотні скісні риски
+    print(filename, "- occurrences of 'the':", len(words))  # Виводимо назву файла та кількість знайдених слів
+
+
+# Завдання 2.7. Заміна переносів рядків пробілами
+
+with open("book1.txt", "r", encoding="utf-8-sig") as file:  # Відкриваємо одну із книг
+    text = file.read()  # Зчитуємо весь текст книги
+
+text = text.replace("\n", " ")  # Замінюємо кожен символ нового рядка звичайним пробілом
+
+with open("formatted_text.txt", "w", encoding="utf-8") as file:  # Відкриваємо новий файл для результату
+    file.write(text)  # Записуємо текст із заміненими переносами рядків
+
+
+# Завдання 2.8. Пошук заголовків розділів Робінзона Крузо
+# Очікуємо, що кожен заголовок займає один рядок і починається з CHAPTER
+
+chapters = []  # Створюємо порожній список заголовків
+
+with open("robinson.txt", "r", encoding="utf-8-sig") as file:  # Відкриваємо файл із текстом Робінзона Крузо
+    for line in file:  # Перебираємо рядки книги
+        line = line.strip()  # Прибираємо пробіли та переноси по краях рядка
+
+        if line.startswith("CHAPTER ") and line not in chapters:  # Перевіряємо початок рядка та відсутність такого заголовка у списку
+            chapters.append(line)  # Додаємо знайдений заголовок до списку
+
+with open("chapters.txt", "w", encoding="utf-8") as file:  # Відкриваємо файл для збереження заголовків
+    for chapter in chapters:  # Перебираємо всі знайдені заголовки
+        file.write(chapter + "\n")  # Записуємо кожен заголовок з нового рядка
+
+
+# Завдання 2.9. Відсоток малих і великих літер
+
+lower = 0  # Лічильник малих літер
+upper = 0  # Лічильник великих літер
+letters = 0  # Лічильник усіх літер
+
+with open("monte_cristo.txt", "r", encoding="utf-8-sig") as file:  # Відкриваємо текст Графа Монте-Крісто
+    text = file.read()  # Зчитуємо весь текст
+
+for char in text:  # По черзі беремо кожен символ тексту
+    if char.isalpha():  # Перевіряємо, чи є символ літерою
+        letters += 1  # Збільшуємо загальну кількість літер на одиницю
+
+        if char.islower():  # Перевіряємо, чи літера мала
+            lower += 1  # Збільшуємо кількість малих літер
+        elif char.isupper():  # Якщо літера не мала, перевіряємо, чи вона велика
+            upper += 1  # Збільшуємо кількість великих літер
+
+if letters > 0:  # Перевіряємо наявність літер, щоб уникнути ділення на нуль
+    print("Lowercase:", round(lower / letters * 100, 2), "%")  # Обчислюємо відсоток малих літер і округлюємо до двох знаків
+    print("Uppercase:", round(upper / letters * 100, 2), "%")  # Обчислюємо відсоток великих літер і округлюємо до двох знаків
+else:  # Виконуємо цей блок, якщо літер у тексті немає
+    print("No letters found.")  # Повідомляємо, що літер не знайдено
